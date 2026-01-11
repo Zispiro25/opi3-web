@@ -61,17 +61,17 @@
     </body>
     <script>
         function prender_server(){ 
-            fetch("adserv.completohosting.lat/prender").then(response => response.json()).then(data => {
+            fetch("https://adserv.completohosting.lat/prender").then(response => response.json()).then(data => {
                 alert("el servidor ha sido activado, por favor espera un par de minutos")
             })
         }
         function apagar_server(){
-            fetch("adserv.completohosting.lat/apagar_server").then(response => response.json()).then(data => {
+            fetch("https://adserv.completohosting.lat/apagar_server").then(response => response.json()).then(data => {
                 alert("el servidor ha sido apagado, el status demorara un poco en actualizarse")
             })
         }
         function estado_server(){
-        fetch("adserv.completohosting.lat/status_server").then(response => response.json()) 
+        fetch("https://adserv.completohosting.lat/status_server").then(response => response.json()) 
      .then(data => {
         const estado = document.getElementById('status');
         estado.textContent = "Prendido :)"
