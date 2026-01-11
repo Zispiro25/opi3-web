@@ -61,22 +61,23 @@
     </body>
     <script>
         function prender_server(){ 
-            fetch("http://172.22.110.92:5000/prender").then(response => response.json()).then(data => {
+            fetch("adserv.completohosting.lat/prender").then(response => response.json()).then(data => {
                 alert("el servidor ha sido activado, por favor espera un par de minutos")
             })
         }
         function apagar_server(){
-            fetch("http://172.22.110.92:5000/apagar_server").then(response => response.json()).then(data => {
+            fetch("adserv.completohosting.lat/apagar_server").then(response => response.json()).then(data => {
                 alert("el servidor ha sido apagado, el status demorara un poco en actualizarse")
             })
         }
-        setInterval(function estado_server(){
-        fetch("http://172.22.110.92:5000/status_server").then(response => response.json()) 
+        function estado_server(){
+        fetch("adserv.completohosting.lat/status_server").then(response => response.json()) 
      .then(data => {
         const estado = document.getElementById('status');
         estado.textContent = "Prendido :)"
     console.log(data); 
   }).catch(error => {const estado = document.getElementById('status');
         estado.textContent = "apagado :("})
-    },5000)</script>
+    }
+    setInterval(estado_server, 5000)</script>
 </html>
