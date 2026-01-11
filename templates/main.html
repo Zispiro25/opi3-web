@@ -2,12 +2,81 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>html es mi pasion </title>
+        <title>menu server</title>
     </head>
+    <style>
+        body{
+            background-color: #F5F5F5;
+        }
+        .cuerpo{
+            background-color: white;
+            border: none;
+            border-radius: 20px;
+            width: 1000px;
+            height: 600px;
+            margin: auto;
+
+        }
+        h1{
+            display: flex;
+            justify-content: center;
+        }
+        .botones{
+            display: flex;
+            flex-direction: column; 
+            gap: 10px;
+            width: auto;
+            margin: 10%;
+            padding: 10px;
+            text-align: center;  
+            font-size: 30px;          
+            align-items: center;  
+        }
+        #prender{
+            background-color: skyblue;
+            border: none;
+            border-radius: 4px;
+            width: 150px;
+            height: 70px;
+
+        }
+        #apagar{
+            background-color: red;
+            border: none;
+            border-radius: 4px;
+            width: 150px;
+            height: 70px;
+
+        }
+
+    </style>
     <body>
-        <h1>pulsa el boton para prender el server</h1>
-        <form action="/main/prender" method="post">
-            <button type="submit">prender</button>
-        </form>
+        <div class = "cuerpo">
+        <h1>Que quieres hacer Estado =><span id="status">obteniendo estado...</span></h1> 
+        <div class="botones">
+        <button id="prender" onclick="prender_server()">prender</button>
+        <button id="apagar" onclick="apagar_server()">apagar</button>
+        </div>
+        </div>
     </body>
+    <script>
+        function prender_server(){ 
+            fetch("http://172.22.110.92:5000/prender").then(response => response.json()).then(data => {
+                alert("el servidor ha sido activado, por favor espera un par de minutos")
+            })
+        }
+        function apagar_server(){
+            fetch("http://172.22.110.92:5000/apagar_server").then(response => response.json()).then(data => {
+                alert("el servidor ha sido apagado, el status demorara un poco en actualizarse")
+            })
+        }
+        setInterval(function estado_server(){
+        fetch("http://172.22.110.92:5000/status_server").then(response => response.json()) 
+     .then(data => {
+        const estado = document.getElementById('status');
+        estado.textContent = "Prendido :)"
+    console.log(data); 
+  }).catch(error => {const estado = document.getElementById('status');
+        estado.textContent = "apagado :("})
+    },5000)</script>
 </html>
