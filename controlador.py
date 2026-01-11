@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response
 import requests
 app = Flask(__name__)
 from prender_s import prender_server
@@ -14,10 +14,10 @@ def verificacion_sesion():
 def iniciar_sesion():
     nombre = request.form['usuario']
     contra = request.form['contra']
-    request.cookies.set("username", nombre)
-    
+    resp = make_response(render_template('main.html'))    
+    resp.set_cookie("username","admin") 
     if nombre == "admin" and contra == "123":
-        return render_template('main.html')
+        return resp
     else:
         return 'contraseña/usuario incorrecto'
     
