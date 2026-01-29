@@ -70,6 +70,16 @@
                 alert("el servidor ha sido apagado, el status demorara un poco en actualizarse")
             })
         }
+        async function proceso_apagar(){
+            apagar_server();
+            try{
+                const estado = await fetch("https://adserv.completohosting.lat/status_server");
+                const respuesta = estado.json();
+                apagar_server();
+            }catch(error){
+                
+            }
+        }
         function estado_server(){
         fetch("https://adserv.completohosting.lat/status_server").then(response => response.json()) 
      .then(data => {

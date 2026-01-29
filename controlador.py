@@ -1,10 +1,16 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, redirect,url_for,session
+import json
 import requests
 app = Flask(__name__)
+with(open("key.txt","r")) as f:
+    app.secret_key = f.readline() 
 from prender_s import prender_server
+
 @app.route("/")
-def index():
-    return render_template('password.html')
+@app.route("/<modo>")
+def index(modo = False):
+    
+    return render_template('password.html', modo = modo)
 
 @app.route("/verificacion_sesion", methods = ['GET'])
 def verificacion_sesion():
@@ -14,13 +20,29 @@ def verificacion_sesion():
 def iniciar_sesion():
     nombre = request.form['usuario']
     contra = request.form['contra']
-    resp = make_response(render_template('main.html'))    
-    resp.set_cookie("username","admin") 
-    if nombre == "admin" and contra == "123":
-        return resp
-    else:
-        return 'contraseña/usuario incorrecto'
+    with(open("usuarios.json","r")) as f:
+        datos = json.load(f)
+        try:
+            contraseña = datos[nombre]
+            if contra == str(contraseña): 
+                session['username'] = nombre
+                return redirect(url_for("menu"),code = 303)
+
+                 
+            else:
+               return redirect(url_for("index", modo = "True"))
+
+        except KeyError as e:
+            return {"error" : 'contraseña/usuario incorrecto'}
+
+
     
+@app.route("/menu", methods=['GET'])
+def menu():
+    if(session['username'] == None):
+        return redirect(url_for("/"))
+    else:
+        return render_template('main.html')
 @app.route("/prender", methods=['GET'])
 def prender():
     estado = "activado"
