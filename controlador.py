@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect,url_for,session
 import json
 import requests
+import time
 app = Flask(__name__)
 with(open("key.txt","r")) as f:
     app.secret_key = f.readline() 
@@ -55,13 +56,17 @@ def prender():
     
 @app.route("/apagar_server", methods=['GET'])
 def apagar():
-    try:
-        response = requests.get("http://192.168.100.13:5000/apagar", timeout = 10)
-    except requests.exceptions.Timeout:
-        return {"estado":"apagado"}
-    finally:
-       return {"estado" : "apagado"}
-    
+    while True:
+        try:
+            response = requests.get("http://192.168.100.13:5000/apagar", timeout=10)
+        except requests.exceptions.Timeout:
+            continue
+        try:
+            time.sleep(60)
+            response = requests.get("http://192.168.100.13:5000/status", timeout=5)
+            respuesta = response.json()
+        except requests.exceptions.Timeout:
+            return {"estado" : "apagado"}
 
 @app.route("/status_server", methods=['GET'] )
 def status():
